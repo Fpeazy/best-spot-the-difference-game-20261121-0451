@@ -15,11 +15,11 @@
         ' Z" fill="#ffd97a" stroke="#d9a441" stroke-width="0.8"/>';
     });
     return '<g class="found-ring">' +
-      '<circle class="ring-pulse" cx="' + x + '" cy="' + y + '" r="' + r + '" fill="rgba(217,164,65,0.18)" stroke="#d9a441" stroke-width="5"/>' +
-      '<circle cx="' + x + '" cy="' + y + '" r="' + (r - 7) + '" fill="none" stroke="#ffd97a" stroke-width="2.5"/>' +
+      '<circle class="ring-pulse" cx="' + x + '" cy="' + y + '" r="' + r + '" fill="rgba(217,164,65,0.18)" stroke="#d9a441" stroke-width="6.5"/>' +
+      '<circle cx="' + x + '" cy="' + y + '" r="' + (r - 7) + '" fill="none" stroke="#ffd97a" stroke-width="3"/>' +
       sparks +
-      '<circle cx="' + (x + r * 0.62) + '" cy="' + (y - r * 0.62) + '" r="11" fill="#d9a441" stroke="#fff" stroke-width="2"/>' +
-      '<text x="' + (x + r * 0.62) + '" y="' + (y - r * 0.62 + 4.5) + '" text-anchor="middle" font-size="13" font-weight="900" fill="#2b2118">' + (idx + 1) + '</text>' +
+      '<circle cx="' + (x + r * 0.62) + '" cy="' + (y - r * 0.62) + '" r="12.5" fill="#d9a441" stroke="#fff" stroke-width="2.5"/>' +
+      '<text x="' + (x + r * 0.62) + '" y="' + (y - r * 0.62 + 5) + '" text-anchor="middle" font-size="14" font-weight="900" fill="#2b2118">' + (idx + 1) + '</text>' +
       '</g>';
   }
   function floatNumber(diff, idx) {

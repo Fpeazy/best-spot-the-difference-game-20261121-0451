@@ -95,6 +95,14 @@
     return s;
   }
 
+  // ---------- V1.4: grade pemenang uji buta 300px ----------
+  // Tiga varian diuji buta (A Hangat Dalam, B Golden Hour, C Fokus Sorot):
+  // C menang — sorot radial hangat + vignette kuat, dinding peach-emas,
+  // cincin paling terbaca di 300px. Nilai C di-hardcode di bawah; hanya
+  // warna dinding/lantai/vignette — diff, posisi, dan logika tidak disentuh.
+  var GRADE1 = { name: 'Fokus Sorot', con: 1.22, hue: 8, sat: 1.38, vig: 0.60,
+    wall: ['#ffe9b0', '#eeb45c', '#c98a3e'], floor: ['#a87c40', '#5d3a1c'], glow: 0.28 };
+
   // ================= SCENE 1 — GALERI BATIK =================
   var scene1 = {
     id: 'batik',
@@ -113,21 +121,24 @@
     ],
     draw: function (variant) {
       var B = variant === 'berubah';
+      var G = GRADE1;
       var s = '';
       // defs: gradasi dinding + lantai + glow lampu
       s += '<defs>' +
         '<linearGradient id="wall1" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#fcefc0"/><stop offset="1" stop-color="#e8bd72"/></linearGradient>' +
+        '<stop offset="0" stop-color="' + G.wall[0] + '"/><stop offset="0.55" stop-color="' + G.wall[1] + '"/><stop offset="1" stop-color="' + G.wall[2] + '"/></linearGradient>' +
         '<linearGradient id="floor1" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#b08248"/><stop offset="1" stop-color="#754d22"/></linearGradient>' +
+        '<stop offset="0" stop-color="' + G.floor[0] + '"/><stop offset="1" stop-color="' + G.floor[1] + '"/></linearGradient>' +
         '<radialGradient id="lampGlow" cx="0.5" cy="0.5" r="0.5">' +
         '<stop offset="0" stop-color="#ffe9a8" stop-opacity="0.9"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>' +
         '<radialGradient id="vig1" cx="0.5" cy="0.45" r="0.75">' +
-        '<stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.45"/></radialGradient>' +
+        '<stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="' + G.vig + '"/></radialGradient>' +
+        (G.glow ? '<radialGradient id="glow1" cx="0.5" cy="0.42" r="0.55">' +
+        '<stop offset="0" stop-color="#fff3c4" stop-opacity="' + G.glow + '"/><stop offset="1" stop-color="#fff3c4" stop-opacity="0"/></radialGradient>' : '') +
         '<filter id="grade1" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">' +
-        '<feColorMatrix type="matrix" values="1.15 0 0 0 0 0 1.15 0 0 0 0 0 1.15 0 0 0 0 0 0 1 0"/>' +
-        '<feColorMatrix type="hueRotate" values="8"/>' +
-        '<feColorMatrix type="saturate" values="1.32"/>' +
+        '<feColorMatrix type="matrix" values="' + (G.sepia ? '0.848 0.192 0.047 0 0 0.087 0.922 0.042 0 0 0.068 0.134 0.783 0 0 0 0 0 1 0' : G.con + ' 0 0 0 0 0 ' + G.con + ' 0 0 0 0 0 ' + G.con + ' 0 0 0 0 0 1 0') + '"/>' +
+        '<feColorMatrix type="hueRotate" values="' + G.hue + '"/>' +
+        '<feColorMatrix type="saturate" values="' + G.sat + '"/>' +
         '</filter>' +
         '</defs>';
       // Grading resep "Museum Hangat" (skill color-grading-effects):
@@ -137,9 +148,12 @@
       // hueRotate 5.4->8, vignette 0.35->0.45, dinding/lantai lebih dalam)
       // karena integrasi glfx.js asli tidak jelas lebih baik (dinding
       // memutih, motif tidak lebih terbaca) — direvert ke literal.
+      // V1.4: grade pemenang uji buta 300px — C Fokus Sorot (glow 0.28 + vig 0.60).
       s += '<g filter="url(#grade1)">';
       // ---- BACKGROUND: dinding + jendela lengkung + langit-langit ----
       s += '<rect x="0" y="0" width="620" height="400" fill="url(#wall1)"/>';
+      // sorot radial hangat (varian C) — hanya dinding, objek tetap terang.
+      if (G.glow) s += '<rect x="0" y="0" width="620" height="400" fill="url(#glow1)"/>';
       // vignette resep Museum Hangat (0.6/0.35) — hanya dinding, objek tetap terang.
       s += '<rect x="0" y="0" width="620" height="400" fill="url(#vig1)"/>';
       s += '<rect x="0" y="0" width="620" height="14" fill="#8a6d2f"/>';
@@ -263,16 +277,18 @@
         '<radialGradient id="spot2" cx="0.5" cy="0.5" r="0.5">' +
         '<stop offset="0" stop-color="#ffe9a8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>' +
         '<radialGradient id="vig2" cx="0.5" cy="0.45" r="0.75">' +
-        '<stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.5"/></radialGradient>' +
+        '<stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/></radialGradient>' +
         '<filter id="grade2" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">' +
-        '<feColorMatrix type="matrix" values="1.14 0 0 0 -0.11 0 1.14 0 0 -0.11 0 0 1.14 0 0 -0.11 0 0 0 1 0"/>' +
-        '<feColorMatrix type="hueRotate" values="-10.8"/>' +
-        '<feColorMatrix type="saturate" values="1.18"/>' +
+        '<feColorMatrix type="matrix" values="1.19 0 0 0 -0.11 0 1.19 0 0 -0.11 0 0 1.19 0 0 -0.11 0 0 0 1 0"/>' +
+        '<feColorMatrix type="hueRotate" values="-12"/>' +
+        '<feColorMatrix type="saturate" values="1.28"/>' +
         '</filter>' +
         '</defs>';
       // Grading resep "Aula Fosil Teal" (skill color-grading-effects):
       // brightnessContrast(-0.04, 0.14) + hueSaturation(-0.06, 0.18),
       // diterapkan literal sebagai filter SVG (sRGB) pada seluruh scene.
+      // V1.4: didorong searah pemenang uji buta (sat 1.18->1.28, kontras
+      // 1.14->1.19, hue -10.8->-12, vig 0.5->0.55, sorot 0.20->0.24).
       s += '<g filter="url(#grade2)">';
       // ---- BACKGROUND: dinding teal bergradasi + balok langit-langit + molding ----
       s += '<rect x="0" y="0" width="620" height="400" fill="url(#wall2)"/>';
@@ -317,7 +333,7 @@
         ? { x0: 402, y0: 330, x1: 552, y1: 330, px: 480, py: 408 }
         : { x0: 142, y0: 302, x1: 288, y1: 302, px: 215, py: 408 };
       s += '<path d="M304 30 L316 30 L' + cone.x1 + ' ' + cone.y0 + ' L' + cone.x0 + ' ' + cone.y0 +
-        ' Z" fill="#ffe9a8" opacity="0.20"/>';
+        ' Z" fill="#ffe9a8" opacity="0.24"/>';
       s += '<path d="M307 30 L313 30 L' + (cone.x1 - 22) + ' ' + (cone.y0 - 8) + ' L' + (cone.x0 + 22) + ' ' + (cone.y0 - 8) +
         ' Z" fill="#ffe9a8" opacity="0.28"/>';
       // rumah lampu + glow
@@ -466,6 +482,8 @@
         '<stop offset="0" stop-color="#2c3a7d"/><stop offset="0.5" stop-color="#1a2450"/><stop offset="1" stop-color="#0b1230"/></linearGradient>' +
         '<linearGradient id="floor3" x1="0" y1="0" x2="0" y2="1">' +
         '<stop offset="0" stop-color="#2c3550"/><stop offset="1" stop-color="#141a2e"/></linearGradient>' +
+        '<linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#0d1b3e"/><stop offset="1" stop-color="#060a18"/></linearGradient>' +
         '<radialGradient id="spot3" cx="0.5" cy="0.5" r="0.5">' +
         '<stop offset="0" stop-color="#9fb4ff" stop-opacity="0.5"/><stop offset="1" stop-color="#9fb4ff" stop-opacity="0"/></radialGradient>' +
         '<radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5">' +
@@ -477,18 +495,22 @@
         '<radialGradient id="nebC" cx="0.5" cy="0.5" r="0.5">' +
         '<stop offset="0" stop-color="#4a6fd8" stop-opacity="0.5"/><stop offset="1" stop-color="#4a6fd8" stop-opacity="0"/></radialGradient>' +
         '<radialGradient id="vig3" cx="0.5" cy="0.45" r="0.75">' +
-        '<stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.45"/></radialGradient>' +
+        '<stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.50"/></radialGradient>' +
         '<filter id="grade3" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">' +
-        '<feColorMatrix type="matrix" values="1.12 0 0 0 -0.14 0 1.12 0 0 -0.14 0 0 1.12 0 0 -0.14 0 0 0 1 0"/>' +
-        '<feColorMatrix type="hueRotate" values="-18"/>' +
-        '<feColorMatrix type="saturate" values="1.3"/>' +
+        '<feColorMatrix type="matrix" values="1.17 0 0 0 -0.14 0 1.17 0 0 -0.14 0 0 1.17 0 0 -0.14 0 0 0 1 0"/>' +
+        '<feColorMatrix type="hueRotate" values="-20"/>' +
+        '<feColorMatrix type="saturate" values="1.40"/>' +
         '</filter>' +
         '</defs>';
       // Grading resep "Planetarium" (skill color-grading-effects):
       // brightnessContrast(-0.08, 0.12) + hueSaturation(-0.10, 0.30),
       // diterapkan literal sebagai filter SVG (sRGB) pada seluruh scene.
+      // V1.4: didorong searah pemenang uji buta (sat 1.3->1.40, kontras
+      // 1.12->1.17, hue -18->-20, vig 0.45->0.50) + langit gelap di belakang
+      // kubah supaya sudut atas tidak krem kosong.
       s += '<g filter="url(#grade3)">';
-      // ---- BACKGROUND: kubah nebula + Bima Sakti + bintang warna-warni + rusuk kubah ----
+      // ---- BACKGROUND: langit gelap + kubah nebula + Bima Sakti + bintang warna-warni + rusuk kubah ----
+      s += '<rect x="0" y="0" width="620" height="470" fill="url(#sky3)"/>';
       s += '<path d="M0 400 L0 150 A310 190 0 0 1 620 150 L620 400 Z" fill="url(#wall3)"/>';
       s += '<ellipse cx="120" cy="130" rx="130" ry="70" fill="url(#nebA)"/>' +
         '<ellipse cx="490" cy="90" rx="140" ry="75" fill="url(#nebB)"/>' +
