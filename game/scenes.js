@@ -27,7 +27,7 @@
     return '<g>' +
       '<rect x="' + (x - 5) + '" y="' + (y - 5) + '" width="' + (w + 10) + '" height="' + (h + 10) +
       '" rx="4" fill="#8a6d2f"/>' +
-      '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#fdf6e3" stroke="#d9a441" stroke-width="1.5"/>' +
+      '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#fdf6e3" stroke="#e8b64c" stroke-width="2"/>' +
       motif +
       '</g>';
   }
@@ -117,22 +117,26 @@
       // defs: gradasi dinding + lantai + glow lampu
       s += '<defs>' +
         '<linearGradient id="wall1" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#fdf3d8"/><stop offset="1" stop-color="#eec98f"/></linearGradient>' +
+        '<stop offset="0" stop-color="#fcefc0"/><stop offset="1" stop-color="#e8bd72"/></linearGradient>' +
         '<linearGradient id="floor1" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#b98a52"/><stop offset="1" stop-color="#7d5527"/></linearGradient>' +
+        '<stop offset="0" stop-color="#b08248"/><stop offset="1" stop-color="#754d22"/></linearGradient>' +
         '<radialGradient id="lampGlow" cx="0.5" cy="0.5" r="0.5">' +
         '<stop offset="0" stop-color="#ffe9a8" stop-opacity="0.9"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>' +
         '<radialGradient id="vig1" cx="0.5" cy="0.45" r="0.75">' +
-        '<stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.35"/></radialGradient>' +
+        '<stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.45"/></radialGradient>' +
         '<filter id="grade1" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">' +
-        '<feColorMatrix type="matrix" values="1.1 0 0 0 0.01 0 1.1 0 0 0.01 0 0 1.1 0 0 0.01 0 0 0 1 0"/>' +
-        '<feColorMatrix type="hueRotate" values="5.4"/>' +
-        '<feColorMatrix type="saturate" values="1.22"/>' +
+        '<feColorMatrix type="matrix" values="1.15 0 0 0 0 0 1.15 0 0 0 0 0 1.15 0 0 0 0 0 0 1 0"/>' +
+        '<feColorMatrix type="hueRotate" values="8"/>' +
+        '<feColorMatrix type="saturate" values="1.32"/>' +
         '</filter>' +
         '</defs>';
       // Grading resep "Museum Hangat" (skill color-grading-effects):
       // brightnessContrast(0.06, 0.10) + hueSaturation(0.03, 0.22),
       // diterapkan literal sebagai filter SVG (sRGB) pada seluruh scene.
+      // V1.3: diperkuat bertahap (saturate 1.22->1.32, kontras 1.10->1.15,
+      // hueRotate 5.4->8, vignette 0.35->0.45, dinding/lantai lebih dalam)
+      // karena integrasi glfx.js asli tidak jelas lebih baik (dinding
+      // memutih, motif tidak lebih terbaca) — direvert ke literal.
       s += '<g filter="url(#grade1)">';
       // ---- BACKGROUND: dinding + jendela lengkung + langit-langit ----
       s += '<rect x="0" y="0" width="620" height="400" fill="url(#wall1)"/>';
