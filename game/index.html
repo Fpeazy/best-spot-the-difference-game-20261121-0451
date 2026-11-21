@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MUSEUM NUSANTARA — Jejak yang Berubah</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <header id="hud">
+    <div class="brand">
+      <div class="brand-mark">MN</div>
+      <div>
+        <h1>MUSEUM NUSANTARA</h1>
+        <p class="tagline">Jejak yang Berubah &mdash; cari perbedaannya sebelum museum tutup</p>
+      </div>
+    </div>
+    <nav id="scene-tabs" aria-label="Ruangan">
+      <button data-scene="0" class="tab active">1 &middot; Galeri Batik</button>
+      <button data-scene="1" class="tab">2 &middot; Ruang Fosil</button>
+      <button data-scene="2" class="tab">3 &middot; Planetarium</button>
+    </nav>
+    <div class="hud-right">
+      <div class="hud-box timer-box">
+        <span class="hud-label">TUTUP DALAM</span>
+        <span id="timer" class="hud-value">15:00</span>
+      </div>
+      <div class="hud-box">
+        <span class="hud-label">SKOR</span>
+        <span id="score" class="hud-value">0</span>
+      </div>
+      <button id="hint-btn" class="hud-btn" title="Hint Kilat (H)">KILAT (<span id="hint-count">3</span>)</button>
+      <span id="ronda-badge" class="ronda-badge hidden">RONDA &times;3</span>
+    </div>
+  </header>
+
+  <main id="stage">
+    <section class="panel" id="panel-left">
+      <div class="panel-label">ASLI</div>
+      <div class="panel-frame" id="frame-left"></div>
+    </section>
+    <div class="vs-badge" aria-hidden="true">VS</div>
+    <section class="panel" id="panel-right">
+      <div class="panel-label">BERUBAH</div>
+      <div class="panel-frame" id="frame-right"></div>
+    </section>
+  </main>
+
+  <footer id="bottombar">
+    <div class="progress">
+      <span id="scene-name">Galeri Batik</span>
+      <span id="counter" class="counter">DITEMUKAN 0 &bull; SISA 8</span>
+      <span id="dots" class="dots"></span>
+    </div>
+    <div class="found-list">
+      <span class="found-title">Sudah ketemu:</span>
+      <ul id="found-names"></ul>
+    </div>
+    <p class="keys">Klik perbedaan di gambar mana pun &nbsp;&middot;&nbsp; <b>H</b> kilat &nbsp;&middot;&nbsp; <b>M</b> kaca pembesar &nbsp;&middot;&nbsp; <b>1&ndash;3</b> pindah ruangan &nbsp;&middot;&nbsp; <b>R</b> ulang ruangan &nbsp;&middot;&nbsp; Klik salah &minus;5 detik</p>
+  </footer>
+</div>
+
+<div id="flash" class="hidden"></div>
+<div id="loupe" class="hidden"><div id="loupe-inner"></div></div>
+
+<div id="victory" class="overlay hidden">
+  <div class="overlay-card">
+    <p class="overlay-kicker">RONDA SELESAI</p>
+    <h2>MUSEUM SELESAI &mdash; 30/30</h2>
+    <p id="victory-detail">Semua jejak yang berubah sudah ketemu.</p>
+    <div id="cat-constellation" aria-hidden="true">
+      <svg viewBox="0 0 200 120" width="200" height="120">
+        <g fill="#ffd97a">
+          <circle cx="40" cy="70" r="4"/><circle cx="70" cy="40" r="4"/><circle cx="110" cy="35" r="4"/>
+          <circle cx="150" cy="45" r="4"/><circle cx="165" cy="80" r="4"/><circle cx="120" cy="85" r="4"/>
+          <circle cx="75" cy="90" r="4"/>
+        </g>
+        <g stroke="#ffd97a" stroke-width="2" fill="none">
+          <path d="M40 70 L70 40 L110 35 L150 45 L165 80 L120 85 L75 90 L40 70"/>
+        </g>
+        <text x="100" y="112" text-anchor="middle" fill="#ffd97a" font-size="11">Rasi Kucing Moci</text>
+      </svg>
+    </div>
+    <p class="overlay-note">Moci si kucing museum mengucapkan terima kasih.</p>
+    <button id="play-again" class="hud-btn big">Main Lagi (R)</button>
+  </div>
+</div>
+
+<div id="gameover" class="overlay hidden">
+  <div class="overlay-card">
+    <p class="overlay-kicker">MUSEUM TUTUP</p>
+    <h2>Waktu Habis</h2>
+    <p id="gameover-detail">Pintu museum terkunci. Coba lagi besok malam.</p>
+    <button id="try-again" class="hud-btn big">Coba Lagi (R)</button>
+  </div>
+</div>
+
+<script src="scenes.js"></script>
+<script src="renderer.js"></script>
+<script src="diff-engine.js"></script>
+<script src="hint.js"></script>
+<script src="timer.js"></script>
+<script src="magnifier.js"></script>
+<script src="input.js"></script>
+<script src="audio.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+/* MUSEUM NUSANTARA — flat vector berlapis, palet hangat museum: krem / teal / emas */
+:root {
+  --cream: #f7ead2;
+  --cream-2: #f3e0bd;
+  --ink: #2b2118;
+  --teal: #0f5f5c;
+  --teal-deep: #0a3f3d;
+  --gold: #d9a441;
+  --gold-soft: #ffd97a;
+  --terra: #c96f3f;
+  --red: #b23a2e;
+  --panel-bg: #1d1712;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--panel-bg);
+  color: var(--cream);
+  font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+  overflow: hidden;
+}
+#app { display: flex; flex-direction: column; height: 100vh; width: 100vw; }
+
+/* ---------- HUD ---------- */
+#hud {
+  display: flex; align-items: center; gap: 18px;
+  padding: 8px 16px;
+  background: linear-gradient(180deg, #2b2118, #241b13);
+  border-bottom: 3px solid var(--gold);
+}
+.brand { display: flex; align-items: center; gap: 10px; min-width: 300px; }
+.brand-mark {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: var(--gold); color: var(--teal-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 17px; letter-spacing: 1px;
+  box-shadow: 0 0 0 2px var(--cream);
+}
+.brand h1 { font-size: 19px; letter-spacing: 2px; color: var(--gold-soft); line-height: 1.1; }
+.tagline { font-size: 11px; color: #d8c9a8; }
+#scene-tabs { display: flex; gap: 6px; }
+.tab {
+  background: #3a2d1e; color: #e8dcc0; border: 2px solid #6b5636;
+  border-radius: 8px; padding: 7px 12px; font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+.tab.active { background: var(--gold); color: var(--teal-deep); border-color: var(--gold-soft); }
+.tab.done { border-color: #7fb069; color: #cfe8b8; }
+.hud-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.hud-box {
+  background: #120e0a; border: 2px solid #6b5636; border-radius: 8px;
+  padding: 4px 12px; text-align: center; min-width: 92px;
+}
+.hud-label { display: block; font-size: 9px; letter-spacing: 2px; color: #c9b78f; }
+.hud-value { font-size: 20px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
+.timer-box.low .hud-value { color: #ff8a7a; }
+.hud-btn {
+  background: var(--gold); color: var(--teal-deep); border: 2px solid var(--gold-soft);
+  border-radius: 8px; padding: 9px 14px; font-size: 14px; font-weight: 900;
+  cursor: pointer; font-family: inherit;
+}
+.hud-btn:hover { background: var(--gold-soft); }
+.hud-btn.big { font-size: 16px; padding: 12px 22px; }
+.hud-btn:disabled { opacity: .45; cursor: default; }
+.ronda-badge {
+  background: #2e7d32; color: #fff; border-radius: 20px; padding: 6px 12px;
+  font-weight: 900; font-size: 13px; border: 2px solid #a5d6a7;
+}
+.hidden { display: none !important; }
+
+/* ---------- Stage: dua panel ---------- */
+#stage {
+  flex: 1; display: flex; align-items: stretch; justify-content: center;
+  gap: 10px; padding: 10px 16px 6px; position: relative;
+}
+.panel { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.panel-label {
+  text-align: center; font-size: 12px; font-weight: 900; letter-spacing: 3px;
+  color: var(--gold-soft); padding-bottom: 5px;
+}
+.panel-frame {
+  flex: 1; border: 3px solid var(--gold); border-radius: 10px; overflow: hidden;
+  background: var(--cream); position: relative; cursor: crosshair;
+  box-shadow: 0 6px 18px rgba(0,0,0,.5);
+  aspect-ratio: 620 / 470; max-height: 100%;
+}
+.panel-frame svg { display: block; width: 100%; height: 100%; }
+.vs-badge {
+  align-self: center; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--gold); color: var(--teal-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 15px; border: 3px solid var(--cream);
+  box-shadow: 0 3px 10px rgba(0,0,0,.5); z-index: 3; flex: none;
+}
+.found-ring { pointer-events: none; }
+
+/* ---------- Bottom bar ---------- */
+#bottombar {
+  padding: 8px 16px 10px; background: #241b13; border-top: 2px solid #6b5636;
+}
+.progress { display: flex; align-items: center; gap: 14px; }
+#scene-name { font-size: 16px; font-weight: 900; color: var(--gold-soft); }
+.counter { font-size: 20px; font-weight: 900; color: var(--gold-soft); font-variant-numeric: tabular-nums; background: #3a2d1e; border: 2px solid var(--gold); border-radius: 8px; padding: 2px 12px; }
+.dots { display: flex; gap: 6px; }
+.dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid #8a7648; background: transparent;
+}
+.dot.found { background: #7fb069; border-color: #cfe8b8; }
+.found-list { display: flex; gap: 8px; align-items: baseline; margin-top: 5px; min-height: 22px; }
+.found-title { font-size: 12px; font-weight: 900; color: #c9b78f; letter-spacing: 1px; white-space: nowrap; }
+#found-names { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 12px; }
+#found-names li { font-size: 12px; color: #d9f0c2; }
+#found-names li::before { content: "\2713  "; color: #7fb069; font-weight: 900; }
+.keys { font-size: 11px; color: #b3a586; margin-top: 4px; }
+.keys b { color: var(--gold-soft); background: #3a2d1e; border: 1px solid #6b5636; border-radius: 4px; padding: 0 4px; }
+
+/* ---------- Hint flash + loupe ---------- */
+#flash {
+  position: fixed; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 40;
+}
+#flash.on { animation: kilat .35s ease-out; }
+@keyframes kilat { 0% { opacity: 0; } 25% { opacity: .85; } 100% { opacity: 0; } }
+.hint-silhouette { pointer-events: none; }
+#loupe {
+  position: fixed; width: 190px; height: 190px; border-radius: 50%;
+  border: 4px solid var(--gold); box-shadow: 0 0 0 3px #2b2118, 0 8px 24px rgba(0,0,0,.6);
+  overflow: hidden; pointer-events: none; z-index: 30; background: var(--cream);
+}
+#loupe-inner { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+#loupe-inner svg { display: block; }
+
+/* ---------- Overlay ---------- */
+.overlay {
+  position: fixed; inset: 0; background: rgba(10, 8, 5, .82);
+  display: flex; align-items: center; justify-content: center; z-index: 50;
+}
+.overlay-card {
+  background: linear-gradient(180deg, #f7ead2, #efd9ac); color: var(--ink);
+  border: 4px solid var(--gold); border-radius: 16px; padding: 28px 40px;
+  text-align: center; max-width: 560px; box-shadow: 0 12px 40px rgba(0,0,0,.7);
+}
+.overlay-kicker { letter-spacing: 4px; font-size: 12px; font-weight: 900; color: var(--terra); }
+.overlay-card h2 { font-size: 30px; margin: 8px 0; color: var(--teal-deep); }
+.overlay-card p { font-size: 15px; margin: 6px 0; }
+#cat-constellation { margin: 10px auto 4px; }
+.overlay-note { font-style: italic; color: #6b5636; }
+.overlay-card .hud-btn { margin-top: 12px; }
+
+/* ---------- Efek visual (perintah Fxzy 19:06 WIB) ---------- */
+/* Semua animasi berangkat dari state akhir yang terlihat — jadi saat mode
+   screenshot membekukan animasi, tampilannya tetap lengkap & konsisten. */
+.hud-value, .tab, .hud-btn { transition: background-color .2s ease, color .2s ease, transform .15s ease; }
+.tab:hover { transform: translateY(-1px); }
+
+/* Cincin emas berdenyut + percikan bintang */
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.09); opacity: .82; }
+}
+.found-ring .ring-pulse { transform-box: fill-box; transform-origin: center; animation: ringPulse 1.6s ease-in-out infinite; }
+@keyframes sparkleTwinkle { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+.sparkle { animation: sparkleTwinkle 1.4s ease-in-out infinite; }
+@keyframes floatUp { 0% { opacity: 0; transform: translateY(6px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-22px); } }
+.float-num text { animation: floatUp 1.2s ease-out forwards; }
+
+/* Bintang berkelip di kubah planetarium */
+@keyframes twinkle { 0%, 100% { opacity: .95; } 50% { opacity: .3; } }
+.twinkle { animation: twinkle 2.4s ease-in-out infinite; }
+
+/* Lencana RONDA berdenyut saat aktif */
+@keyframes rondaPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+.ronda-badge.pulse { animation: rondaPulse 1s ease-in-out infinite; }
+
+/* Siluet hint KILAT + glow */
+.hint-silhouette { filter: drop-shadow(0 0 14px rgba(255, 217, 122, .95)); }
+
+/* Rasi kucing victory: menyala bertahap */
+@keyframes constLit { from { opacity: .15; } to { opacity: 1; } }
+#cat-constellation circle { animation: constLit 1.2s ease-out both; }
+#cat-constellation circle:nth-child(1) { animation-delay: .1s; }
+#cat-constellation circle:nth-child(2) { animation-delay: .35s; }
+#cat-constellation circle:nth-child(3) { animation-delay: .6s; }
+#cat-constellation circle:nth-child(4) { animation-delay: .85s; }
+#cat-constellation circle:nth-child(5) { animation-delay: 1.1s; }
+#cat-constellation circle:nth-child(6) { animation-delay: 1.35s; }
+#cat-constellation circle:nth-child(7) { animation-delay: 1.6s; }
+
+/* Konfeti bintang victory */
+@keyframes confettiFall { 0% { transform: translateY(-8px) rotate(0deg); opacity: 1; } 100% { transform: translateY(26px) rotate(200deg); opacity: .85; } }
+.confetti-star { position: absolute; border-radius: 50%; animation: confettiFall 1.8s ease-in-out infinite alternate; }
+#victory .overlay-card { position: relative; overflow: hidden; }
+
+/* Mode screenshot: BEKUKAN semua animasi supaya deterministik. */
+.shot-mode * { animation: none !important; transition: none !important; }
+.shot-mode .twinkle { opacity: .9; }
+.shot-mode .sparkle { opacity: 1; }
+.shot-mode #cat-constellation circle { opacity: 1; }
