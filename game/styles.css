@@ -68,6 +68,7 @@ body {
 }
 .hidden { display: none !important; }
 
+.hud-value, .counter, #scene-name, .brand h1 { text-shadow: 0 1px 2px rgba(0,0,0,.55); }
 /* ---------- Stage: dua panel ---------- */
 #stage {
   flex: 1; display: flex; align-items: stretch; justify-content: center;
