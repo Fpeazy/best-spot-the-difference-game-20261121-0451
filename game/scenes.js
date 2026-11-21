@@ -108,7 +108,7 @@
       { id: 4, name: 'Tanda — MENYENTUH jadi MEMOTRET', type: 'word', x: 525, y: 340, r: 36, shape: 'rect', rx: 55, ry: 20 },
       { id: 5, name: 'Pot tanaman — daun 5 jadi 4', type: 'removed', x: 75, y: 350, r: 34 },
       { id: 6, name: 'Lampu langit-langit — 3 nyala jadi 2', type: 'removed', x: 410, y: 38, r: 31 },
-      { id: 7, name: 'Ubin lantai — motif terbalik', type: 'flipped', x: 505, y: 447, r: 31 },
+      { id: 7, name: 'Ubin lantai — motif terbalik', type: 'flipped', x: 505, y: 442, r: 26 },
       { id: 8, name: 'Bingkai batik lasem — mengecil', type: 'resized', x: 500, y: 257, r: 38 }
     ],
     draw: function (variant) {
@@ -122,9 +122,22 @@
         '<stop offset="0" stop-color="#b98a52"/><stop offset="1" stop-color="#7d5527"/></linearGradient>' +
         '<radialGradient id="lampGlow" cx="0.5" cy="0.5" r="0.5">' +
         '<stop offset="0" stop-color="#ffe9a8" stop-opacity="0.9"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>' +
+        '<radialGradient id="vig1" cx="0.5" cy="0.45" r="0.75">' +
+        '<stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.35"/></radialGradient>' +
+        '<filter id="grade1" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">' +
+        '<feColorMatrix type="matrix" values="1.1 0 0 0 0.01 0 1.1 0 0 0.01 0 0 1.1 0 0 0.01 0 0 0 1 0"/>' +
+        '<feColorMatrix type="hueRotate" values="5.4"/>' +
+        '<feColorMatrix type="saturate" values="1.22"/>' +
+        '</filter>' +
         '</defs>';
+      // Grading resep "Museum Hangat" (skill color-grading-effects):
+      // brightnessContrast(0.06, 0.10) + hueSaturation(0.03, 0.22),
+      // diterapkan literal sebagai filter SVG (sRGB) pada seluruh scene.
+      s += '<g filter="url(#grade1)">';
       // ---- BACKGROUND: dinding + jendela lengkung + langit-langit ----
       s += '<rect x="0" y="0" width="620" height="400" fill="url(#wall1)"/>';
+      // vignette resep Museum Hangat (0.6/0.35) — hanya dinding, objek tetap terang.
+      s += '<rect x="0" y="0" width="620" height="400" fill="url(#vig1)"/>';
       s += '<rect x="0" y="0" width="620" height="14" fill="#8a6d2f"/>';
       [70, 300, 520].forEach(function (cx) {
         s += '<g><path d="M' + (cx - 34) + ' 78 L' + (cx - 34) + ' 34 A34 26 0 0 1 ' + (cx + 34) +
@@ -210,6 +223,7 @@
       // tali pembatas depan bingkai bawah (foreground tipis)
       s += '<g><line x1="30" y1="318" x2="590" y2="318" stroke="#d9a441" stroke-width="4"/>' +
         '<circle cx="30" cy="318" r="6" fill="#8a6d2f"/><circle cx="310" cy="318" r="6" fill="#8a6d2f"/><circle cx="590" cy="318" r="6" fill="#8a6d2f"/></g>';
+      s += '</g>'; // tutup grup grading grade1
       return s;
     }
   };
@@ -221,110 +235,201 @@
     sub: 'Ruangan 2 dari 3',
     diffCount: 10,
     diffs: [
-      { id: 1, name: 'Triceratops — tanduk 3 jadi 2', type: 'removed', x: 95, y: 285, r: 26 },
-      { id: 2, name: 'Label — REX jadi REXX', type: 'word', x: 310, y: 385, r: 28, shape: 'rect', rx: 70, ry: 14 },
-      { id: 3, name: 'Amonit — spiral berbalik arah', type: 'flipped', x: 90, y: 110, r: 30 },
-      { id: 4, name: 'Trilobit di vitrin — 4 jadi 5', type: 'added', x: 505, y: 300, r: 26 },
-      { id: 5, name: 'Tangga — anak tangga 6 jadi 5', type: 'removed', x: 60, y: 420, r: 28 },
-      { id: 6, name: 'Spotlight — sorot pindah ke ekor', type: 'moved', x: 220, y: 260, r: 30 },
-      { id: 7, name: 'Jejak kaki — 3 pasang jadi 2', type: 'removed', x: 420, y: 440, r: 26 },
-      { id: 8, name: 'Pterodactyl — sayap terlipat jadi terbentang', type: 'moved', x: 390, y: 125, r: 28 },
-      { id: 9, name: 'Peta dinding — satu benua hilang', type: 'removed', x: 520, y: 100, r: 28 },
-      { id: 10, name: 'Gigi T-rex — satu gigi emas', type: 'recoloured', x: 215, y: 275, r: 22 }
+      { id: 1, name: 'Triceratops — tanduk 3 jadi 2', type: 'removed', x: 85, y: 264, r: 30 },
+      { id: 2, name: 'Label — REX jadi REXX', type: 'word', x: 220, y: 385, r: 28, shape: 'rect', rx: 70, ry: 14 },
+      { id: 3, name: 'Amonit — spiral berbalik arah', type: 'flipped', x: 90, y: 110, r: 36 },
+      { id: 4, name: 'Trilobit di vitrin — 4 jadi 5', type: 'added', x: 522, y: 278, r: 28 },
+      { id: 5, name: 'Tangga — anak tangga 6 jadi 5', type: 'removed', x: 110, y: 412, r: 28 },
+      { id: 6, name: 'Spotlight — sorot pindah ke ekor', type: 'moved', x: 215, y: 295, r: 32 },
+      { id: 7, name: 'Jejak kaki — 3 pasang jadi 2', type: 'removed', x: 470, y: 444, r: 28 },
+      { id: 8, name: 'Pterodactyl — sayap terlipat jadi terbentang', type: 'moved', x: 380, y: 112, r: 32 },
+      { id: 9, name: 'Peta dinding — satu benua hilang', type: 'removed', x: 583, y: 80, r: 28 },
+      { id: 10, name: 'Gigi T-rex — satu gigi emas', type: 'recoloured', x: 150, y: 286, r: 26 }
     ],
     draw: function (variant) {
       var B = variant === 'berubah';
       var s = '';
       s += '<defs>' +
         '<linearGradient id="wall2" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#125e58"/><stop offset="1" stop-color="#083632"/></linearGradient>' +
+        '<stop offset="0" stop-color="#14706a"/><stop offset="0.55" stop-color="#0d4f49"/><stop offset="1" stop-color="#062622"/></linearGradient>' +
         '<linearGradient id="floor2" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#33383e"/><stop offset="1" stop-color="#1d2024"/></linearGradient>' +
+        '<stop offset="0" stop-color="#3a4046"/><stop offset="1" stop-color="#191d21"/></linearGradient>' +
+        '<linearGradient id="bone2" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#f6ead0"/><stop offset="1" stop-color="#d9c49a"/></linearGradient>' +
         '<radialGradient id="spot2" cx="0.5" cy="0.5" r="0.5">' +
-        '<stop offset="0" stop-color="#ffe9a8" stop-opacity="0.65"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>' +
+        '<stop offset="0" stop-color="#ffe9a8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>' +
+        '<radialGradient id="vig2" cx="0.5" cy="0.45" r="0.75">' +
+        '<stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.5"/></radialGradient>' +
+        '<filter id="grade2" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">' +
+        '<feColorMatrix type="matrix" values="1.14 0 0 0 -0.11 0 1.14 0 0 -0.11 0 0 1.14 0 0 -0.11 0 0 0 1 0"/>' +
+        '<feColorMatrix type="hueRotate" values="-10.8"/>' +
+        '<feColorMatrix type="saturate" values="1.18"/>' +
+        '</filter>' +
         '</defs>';
-      // ---- BACKGROUND: dinding teal + amonit + peta ----
+      // Grading resep "Aula Fosil Teal" (skill color-grading-effects):
+      // brightnessContrast(-0.04, 0.14) + hueSaturation(-0.06, 0.18),
+      // diterapkan literal sebagai filter SVG (sRGB) pada seluruh scene.
+      s += '<g filter="url(#grade2)">';
+      // ---- BACKGROUND: dinding teal bergradasi + balok langit-langit + molding ----
       s += '<rect x="0" y="0" width="620" height="400" fill="url(#wall2)"/>';
-      // amonit besar di dinding kiri (spiral berbalik di berubah)
-      s += '<g transform="translate(90,110) ' + (B ? 'scale(-1,1)' : '') + '">' +
-        '<circle r="34" fill="#e8dcc0" stroke="#8a6d2f" stroke-width="4"/>' +
-        '<path d="M0 0 A6 6 0 0 1 6 -6 A12 12 0 0 1 0 -18 A20 20 0 0 1 -20 -8 A28 28 0 0 1 -14 16 A32 32 0 0 1 16 12" fill="none" stroke="#8a6d2f" stroke-width="4"/>' +
-        '<circle r="4" fill="#8a6d2f"/></g>';
-      // peta dinding kanan (satu benua hilang di berubah)
-      s += '<g><rect x="470" y="60" width="120" height="80" rx="4" fill="#e8dcc0" stroke="#8a6d2f" stroke-width="3"/>' +
-        '<ellipse cx="505" cy="92" rx="20" ry="14" fill="#3f7d5a"/>' +
-        '<ellipse cx="545" cy="108" rx="16" ry="11" fill="#3f7d5a"/>' +
-        (B ? '' : '<ellipse cx="568" cy="82" rx="10" ry="7" fill="#3f7d5a"/>') +
-        '<path d="M480 128 Q530 122 580 130" stroke="#7a9cc6" stroke-width="3" fill="none"/></g>';
-      // jendela gelap atas
-      s += '<rect x="230" y="24" width="160" height="54" rx="26" fill="#0d2b33" stroke="#8a6d2f" stroke-width="3"/>' +
-        '<circle cx="350" cy="44" r="12" fill="#e8e0c0" opacity="0.8"/>';
-      // ---- MIDGROUND: spotlight + T-rex + triceratops + vitrin + pterodactyl ----
-      // sorot lampu: ke tengkorak (asli) / ke ekor (berubah)
-      var spotX = B ? 440 : 215;
-      s += '<path d="M310 14 L' + (spotX - 55) + ' 300 L' + (spotX + 55) + ' 300 Z" fill="url(#spot2)"/>';
-      s += '<circle cx="310" cy="20" r="10" fill="#d9a441"/>';
-      // kolam cahaya spotlight di lantai (satu sumber cahaya: dari atas ke T-rex)
-      s += '<ellipse cx="' + spotX + '" cy="408" rx="72" ry="10" fill="#ffe9a8" opacity="0.28"/>';
-      // pterodactyl gantung (sayap terlipat / terbentang)
-      s += '<line x1="390" y1="14" x2="390" y2="100" stroke="#2b2118" stroke-width="2"/>';
-      if (B) {
-        s += '<g fill="#c9b48a"><ellipse cx="390" cy="118" rx="16" ry="8"/><path d="M376 116 L330 96 L372 128 Z"/><path d="M404 116 L450 96 L408 128 Z"/><circle cx="404" cy="112" r="6"/></g>';
-      } else {
-        s += '<g fill="#c9b48a"><ellipse cx="390" cy="118" rx="16" ry="8"/><path d="M376 116 L352 138 L378 128 Z"/><path d="M404 116 L428 138 L402 128 Z"/><circle cx="404" cy="112" r="6"/></g>';
-      }
-      // kerangka T-rex (tengah): tengkorak, tulang punggung, rusuk, kaki, ekor
-      s += '<g stroke="#e8dcc0" stroke-width="7" stroke-linecap="round" fill="none">' +
-        '<path d="M150 320 L210 300 L280 292 L360 296 L450 320"/>' + // tulang punggung
-        '<path d="M210 300 L205 340 M245 296 L242 344 M280 294 L280 346 M315 295 L318 344 M350 296 L356 340"/>' + // rusuk
-        '<path d="M250 340 L240 392 M330 342 L342 392"/>' + // kaki
-        '<path d="M450 320 L505 345"/>' + // ekor
-        '</g>';
-      // tengkorak T-rex + rahang + gigi (satu emas di berubah)
-      s += '<g><ellipse cx="200" cy="278" rx="34" ry="24" fill="#e8dcc0" stroke="#b9a888" stroke-width="1.5"/>' +
-        '<path d="M172 286 L196 302 L222 288 Z" fill="#e8dcc0"/>' +
-        '<circle cx="188" cy="270" r="5" fill="#2b2118"/>' +
-        '<path d="M176 292 l4 8 4 -8 4 8 4 -8" stroke="#fff" stroke-width="2" fill="none"/>' +
-        '<path d="M196 292 l4 8 4 -8" stroke="' + (B ? '#d9a441' : '#fff') + '" stroke-width="3" fill="none"/></g>';
-      // label nama Latin
-      s += '<g><rect x="240" y="372" width="140" height="26" rx="4" fill="#2b2118" stroke="#d9a441" stroke-width="1"/>' +
-        '<text x="310" y="390" text-anchor="middle" fill="#ffd97a" font-size="14" font-weight="bold" letter-spacing="1">TYRANNOSAURUS ' + (B ? 'REXX' : 'REX') + '</text></g>';
-      // tengkorak triceratops di podium kiri (3 tanduk -> 2)
-      s += '<g><rect x="55" y="330" width="90" height="16" fill="#8a6d2f"/><rect x="70" y="346" width="60" height="54" fill="#6b5636"/>' +
-        '<ellipse cx="100" cy="300" rx="30" ry="20" fill="#e8dcc0" stroke="#b9a888" stroke-width="1.5"/>' +
-        '<path d="M78 288 L70 262 L86 282 Z" fill="#e8dcc0"/>' +
-        (B ? '' : '<path d="M100 282 L100 254 L110 282 Z" fill="#e8dcc0"/>') +
-        '<path d="M118 288 L130 262 L126 290 Z" fill="#e8dcc0"/>' +
-        '<circle cx="112" cy="296" r="4" fill="#2b2118"/></g>';
-      // vitrin trilobit kanan (4 -> 5) + rim light di tepi atas (cahaya dari atas)
-      s += '<g><rect x="470" y="270" width="90" height="70" rx="4" fill="#bfe0ea" opacity="0.28" stroke="#d9a441" stroke-width="3"/>' +
-        '<line x1="470" y1="270" x2="560" y2="270" stroke="#ffd97a" stroke-width="2.5" opacity="1"/>' +
-        '<rect x="470" y="340" width="90" height="12" fill="#8a6d2f"/></g>';
-      var tri = B ? 5 : 4;
-      for (var ti = 0; ti < tri; ti++) {
-        var txp = 488 + (ti % 3) * 26, typ = 292 + Math.floor(ti / 3) * 26;
-        s += '<ellipse cx="' + txp + '" cy="' + typ + '" rx="9" ry="6" fill="#b98a4a" stroke="#5d3d20" stroke-width="2"/>' +
-          '<line x1="' + txp + '" y1="' + (typ - 6) + '" x2="' + txp + '" y2="' + (typ + 6) + '" stroke="#5d3d20" stroke-width="2"/>';
-      }
-      // ---- FOREGROUND: lantai + tangga + jejak ----
+      s += '<rect x="0" y="0" width="620" height="16" fill="#3a2a18"/>' +
+        '<rect x="0" y="16" width="620" height="3" fill="#d9a441" opacity="0.7"/>';
+      [155, 465].forEach(function (bx) {
+        s += '<rect x="' + (bx - 4) + '" y="19" width="8" height="381" fill="#000" opacity="0.10"/>' +
+          '<rect x="' + (bx - 1) + '" y="19" width="2" height="381" fill="#ffd97a" opacity="0.18"/>';
+      });
+      s += '<line x1="0" y1="170" x2="620" y2="170" stroke="#d9a441" stroke-width="2" opacity="0.35"/>';
+      // lantai digambar di background supaya kaki T-rex berdiri DI ATAS lantai
       s += '<rect x="0" y="400" width="620" height="70" fill="url(#floor2)"/>';
-      // tangga kiri (6 anak tangga -> 5)
+      s += '<line x1="0" y1="400" x2="620" y2="400" stroke="#ffd97a" stroke-width="2" opacity="0.25"/>';
+      // amonit BESAR di dinding kiri (spiral berbalik di berubah) — target loupe
+      s += '<g transform="translate(90,110) ' + (B ? 'scale(-1,1)' : '') + '">' +
+        '<circle r="42" fill="#efe3c2" stroke="#8a6d2f" stroke-width="5"/>' +
+        '<circle r="34" fill="none" stroke="#c9a24a" stroke-width="2"/>' +
+        '<path d="M0 0 A7 7 0 0 1 7 -7 A14 14 0 0 1 0 -21 A23 23 0 0 1 -23 -9 A31 31 0 0 1 -16 19 A38 38 0 0 1 19 14" fill="none" stroke="#8a6d2f" stroke-width="5" stroke-linecap="round"/>' +
+        '<circle r="5" fill="#8a6d2f"/></g>';
+      // cetakan fosil pakis di dinding (dekorasi non-diff, mengisi celah dinding)
+      s += '<g><rect x="160" y="40" width="60" height="78" rx="3" fill="#efe3c2" stroke="#8a6d2f" stroke-width="3"/>' +
+        '<path d="M190 108 L190 52" stroke="#3f7d3a" stroke-width="3" fill="none"/>' +
+        '<path d="M190 100 Q176 92 172 80 M190 100 Q204 92 208 80 M190 88 Q178 80 174 68 M190 88 Q202 80 206 68 M190 76 Q180 68 177 58 M190 76 Q200 68 203 58" stroke="#3f7d3a" stroke-width="2.5" fill="none"/>' +
+        '<circle cx="190" cy="52" r="3" fill="#3f7d3a"/></g>';
+      // peta dinding kanan BESAR (satu benua hilang di berubah)
+      s += '<g><rect x="465" y="55" width="140" height="100" rx="4" fill="#efe3c2" stroke="#8a6d2f" stroke-width="4"/>' +
+        '<ellipse cx="505" cy="95" rx="24" ry="16" fill="#3f7d5a"/>' +
+        '<ellipse cx="550" cy="118" rx="18" ry="12" fill="#3f7d5a"/>' +
+        (B ? '' : '<ellipse cx="583" cy="80" rx="12" ry="9" fill="#3f7d5a"/>') +
+        '<path d="M478 140 Q535 132 595 142" stroke="#7a9cc6" stroke-width="4" fill="none"/>' +
+        '<path d="M505 95 l-8 -6 M505 95 l10 -4" stroke="#2f5c28" stroke-width="1.5"/></g>';
+      // jendela gelap atas + bulan
+      s += '<rect x="230" y="24" width="160" height="54" rx="26" fill="#0d2b33" stroke="#8a6d2f" stroke-width="3"/>' +
+        '<circle cx="350" cy="44" r="12" fill="#e8e0c0" opacity="0.85"/>' +
+        '<circle cx="346" cy="41" r="3" fill="#c9c2a4" opacity="0.7"/>';
+      // vignette tepi (dinding lebih gelap di tepi, bukan datar)
+      s += '<rect x="0" y="0" width="620" height="400" fill="url(#vig2)"/>';
+      // ---- MIDGROUND: spotlight + T-rex + triceratops + vitrin + pterodactyl ----
+      // SATU sumber cahaya: lampu langit-langit di (310,26); kerucut LEBAR ke tengkorak
+      // (asli) / ke ekor (berubah) — perpindahannya harus langsung kelihatan.
+      var cone = B
+        ? { x0: 402, y0: 330, x1: 552, y1: 330, px: 480, py: 408 }
+        : { x0: 142, y0: 302, x1: 288, y1: 302, px: 215, py: 408 };
+      s += '<path d="M304 30 L316 30 L' + cone.x1 + ' ' + cone.y0 + ' L' + cone.x0 + ' ' + cone.y0 +
+        ' Z" fill="#ffe9a8" opacity="0.20"/>';
+      s += '<path d="M307 30 L313 30 L' + (cone.x1 - 22) + ' ' + (cone.y0 - 8) + ' L' + (cone.x0 + 22) + ' ' + (cone.y0 - 8) +
+        ' Z" fill="#ffe9a8" opacity="0.28"/>';
+      // rumah lampu + glow
+      s += '<circle cx="310" cy="30" r="26" fill="url(#spot2)"/>' +
+        '<path d="M296 18 L324 18 L330 32 L290 32 Z" fill="#2b2118" stroke="#d9a441" stroke-width="2"/>' +
+        '<circle cx="310" cy="34" r="8" fill="#fff3c4" stroke="#d9a441" stroke-width="2"/>';
+      // kolam cahaya di lantai (ikut target sorot)
+      s += '<ellipse cx="' + cone.px + '" cy="' + cone.py + '" rx="88" ry="11" fill="#ffe9a8" opacity="0.30"/>';
+      // pterodactyl gantung BESAR (sayap terlipat / terbentang — bentuk beda JELAS)
+      s += '<line x1="380" y1="16" x2="380" y2="92" stroke="#2b2118" stroke-width="2.5"/>';
+      if (B) {
+        s += '<g fill="#d8c9a3" stroke="#8a7a5c" stroke-width="1.5">' +
+          '<path d="M372 108 L300 88 L366 126 Z"/><path d="M388 108 L460 88 L394 126 Z"/>' +
+          '<ellipse cx="380" cy="112" rx="22" ry="10"/>' +
+          '<circle cx="400" cy="104" r="8"/><path d="M406 102 L422 106 L406 110 Z" fill="#d8c9a3"/></g>';
+      } else {
+        s += '<g fill="#d8c9a3" stroke="#8a7a5c" stroke-width="1.5">' +
+          '<path d="M372 110 L338 152 L378 126 Z"/><path d="M388 110 L422 152 L382 126 Z"/>' +
+          '<ellipse cx="380" cy="112" rx="22" ry="10"/>' +
+          '<circle cx="400" cy="104" r="8"/><path d="M406 102 L422 106 L406 110 Z" fill="#d8c9a3"/></g>';
+      }
+      // KERANGKA T-REX — centerpiece BESAR, harus langsung terbaca "T-REX":
+      // tengkorak besar + rahang terbuka bergigi, punggung melengkung, rusuk distinct,
+      // dua kaki belakang, lengan kecil berjari dua, ekor panjang bersegmen.
+      // Tulang digambar 2 lapis (outline gelap lebar, lalu tulang krem) supaya tegas.
+      s += '<ellipse cx="350" cy="410" rx="150" ry="7" fill="#000" opacity="0.18"/>';
+      s += '<g fill="none" stroke-linecap="round">' +
+        '<path d="M235 240 Q290 205 350 215 Q400 225 430 285" stroke="#a08d64" stroke-width="13"/>' +
+        '<path d="M235 240 Q290 205 350 215 Q400 225 430 285" stroke="url(#bone2)" stroke-width="8"/>' +
+        '<path d="M265 224 Q258 255 252 268 M295 212 Q290 248 286 264 M325 211 Q322 250 320 266 M355 219 Q354 256 356 270 M385 235 Q386 268 390 280 M410 258 Q414 285 420 296" stroke="#a08d64" stroke-width="10"/>' +
+        '<path d="M265 224 Q258 255 252 268 M295 212 Q290 248 286 264 M325 211 Q322 250 320 266 M355 219 Q354 256 356 270 M385 235 Q386 268 390 280 M410 258 Q414 285 420 296" stroke="url(#bone2)" stroke-width="6"/>' +
+        '<path d="M340 240 L352 318 L358 392 M398 252 L408 322 L414 392" stroke="#a08d64" stroke-width="12"/>' +
+        '<path d="M340 240 L352 318 L358 392 M398 252 L408 322 L414 392" stroke="url(#bone2)" stroke-width="7"/>' +
+        '<path d="M358 392 L344 404 M358 392 L360 406 M358 392 L374 404 M414 392 L400 404 M414 392 L416 406 M414 392 L430 404" stroke="url(#bone2)" stroke-width="6"/>' +
+        '<path d="M258 272 L246 306 M268 275 L260 308" stroke="url(#bone2)" stroke-width="5"/>' +
+        '<path d="M246 306 L240 312 M246 306 L250 313 M260 308 L256 314 M260 308 L264 314" stroke="url(#bone2)" stroke-width="4"/>' +
+        '</g>';
+      // ruas tulang punggung (vertebra) + pinggul + bahu
+      [[250, 232], [280, 214], [310, 207], [340, 211], [370, 222], [398, 242], [420, 265]].forEach(function (p) {
+        s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="6.5" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>';
+      });
+      s += '<circle cx="340" cy="238" r="10" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<circle cx="398" cy="250" r="10" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<circle cx="258" cy="272" r="9" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>';
+      // ekor panjang bersegmen (meruncing ke kanan-bawah)
+      s += '<g><polygon points="428,278 512,322 514,332 432,294" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<path d="M448 282 L452 296 M468 296 L472 310 M488 308 L492 322" stroke="#a08d64" stroke-width="2"/></g>';
+      // tengkorak T-rex + rahang terbuka + gigi (satu gigi DEPAN EMAS BESAR di berubah)
+      s += '<g>' +
+        '<ellipse cx="210" cy="248" rx="42" ry="30" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<path d="M185 232 Q200 224 218 230" stroke="#a08d64" stroke-width="3" fill="none"/>' +
+        '<polygon points="168,250 138,272 150,284 185,274" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<polygon points="175,288 145,296 155,306 195,296" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<circle cx="200" cy="240" r="6" fill="#2b2118"/><circle cx="202" cy="238" r="1.8" fill="#fff"/>' +
+        '<circle cx="150" cy="260" r="2.5" fill="#2b2118"/>' +
+        '<path d="M164 279 L170 279 L167 287 Z M176 275 L182 275 L179 283 Z" fill="#fff" stroke="#b9a888" stroke-width="1"/>' +
+        '<path d="M160 294 L166 294 L163 288 Z M176 292 L182 292 L179 286 Z" fill="#fff" stroke="#b9a888" stroke-width="1"/>' +
+        (B ? '<circle cx="150" cy="286" r="17" fill="#ffd97a" opacity="0.4"/>' +
+          '<path d="M166 274 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2 Z" fill="#ffd97a"/>' : '') +
+        '<path d="M140 274 L160 274 L150 296 Z" fill="' + (B ? '#d9a441' : '#fff') + '" stroke="' + (B ? '#8a6d2f' : '#b9a888') + '" stroke-width="2"/>' +
+        '</g>';
+      // label nama Latin (plakat besar di dinding)
+      s += '<g><rect x="145" y="372" width="150" height="26" rx="4" fill="#2b2118" stroke="#d9a441" stroke-width="1.5"/>' +
+        '<text x="220" y="390" text-anchor="middle" fill="#ffd97a" font-size="13" font-weight="bold" letter-spacing="1">TYRANNOSAURUS ' + (B ? 'REXX' : 'REX') + '</text></g>';
+      // tengkorak triceratops BESAR di podium kiri: frill kipas + 3 tanduk jelas
+      // (tanduk hidung HILANG di berubah — 3 jadi 2)
+      s += '<g>' +
+        '<rect x="40" y="340" width="90" height="14" rx="3" fill="#8a6d2f"/>' +
+        '<rect x="55" y="354" width="60" height="48" fill="#6b5636"/>' +
+        '<rect x="55" y="354" width="60" height="4" fill="#a87b45"/>' +
+        '<path d="M55 300 Q52 262 85 252 Q118 262 115 300 Q100 290 85 290 Q70 290 55 300 Z" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<path d="M62 276 l6 -8 M74 266 l6 -8 M85 262 l0 -9 M96 266 l-6 -8 M108 276 l-6 -8" stroke="#a08d64" stroke-width="2"/>' +
+        '<ellipse cx="85" cy="298" rx="30" ry="18" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<path d="M60 288 L46 246 L72 282 Z" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        '<path d="M110 288 L126 248 L104 284 Z" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>' +
+        (B ? '' : '<path d="M82 294 L85 258 L94 294 Z" fill="url(#bone2)" stroke="#a08d64" stroke-width="2"/>') +
+        '<circle cx="96" cy="296" r="4" fill="#2b2118"/>' +
+        '<path d="M62 308 Q85 316 108 308" stroke="#a08d64" stroke-width="2" fill="none"/></g>';
+      // vitrin trilobit BESAR kanan (4 -> 5, yang ke-5 di baris bawah tengah)
+      s += '<g><rect x="475" y="225" width="95" height="75" rx="4" fill="#bfe0ea" opacity="0.25" stroke="#d9a441" stroke-width="3"/>' +
+        '<line x1="475" y1="225" x2="570" y2="225" stroke="#ffd97a" stroke-width="3"/>' +
+        '<line x1="480" y1="262" x2="565" y2="262" stroke="#d9a441" stroke-width="2" opacity="0.6"/>' +
+        '<rect x="475" y="300" width="95" height="10" fill="#8a6d2f"/></g>';
+      var tri = B ? [[495, 244], [522, 244], [549, 244], [495, 280], [522, 280]]
+        : [[495, 244], [522, 244], [549, 244], [495, 280]];
+      tri.forEach(function (p) {
+        s += '<g><ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="12" ry="8" fill="#b98a4a" stroke="#5d3d20" stroke-width="2"/>' +
+          '<line x1="' + p[0] + '" y1="' + (p[1] - 8) + '" x2="' + p[0] + '" y2="' + (p[1] + 8) + '" stroke="#5d3d20" stroke-width="2"/>' +
+          '<line x1="' + (p[0] - 12) + '" y1="' + p[1] + '" x2="' + (p[0] + 12) + '" y2="' + p[1] + '" stroke="#5d3d20" stroke-width="1.5"/>' +
+          '<path d="M' + (p[0] + 12) + ' ' + p[1] + ' l6 -3 l-6 3 l6 3 Z" fill="#5d3d20"/></g>';
+      });
+      // ---- FOREGROUND: tangga + jejak + tali pembatas MERAH (lantai sudah di background) ----
+      // tangga kiri (6 anak tangga -> 5; yang hilang = anak tangga paling atas)
       var steps = B ? 5 : 6;
       for (var si = 0; si < steps; si++) {
-        var sx = 20 + si * 12, sy = 448 - si * 8;
-        s += '<rect x="' + sx + '" y="' + sy + '" width="60" height="8" fill="#5d6b74" stroke="#2b2118" stroke-width="1"/>' +
-          '<line x1="' + sx + '" y1="' + sy + '" x2="' + (sx + 60) + '" y2="' + sy + '" stroke="#aeb9c2" stroke-width="2"/>';
+        var sx = 20 + si * 14, sy = 452 - si * 9;
+        s += '<rect x="' + sx + '" y="' + sy + '" width="64" height="9" fill="#5d6b74" stroke="#2b2118" stroke-width="1"/>' +
+          '<line x1="' + sx + '" y1="' + sy + '" x2="' + (sx + 64) + '" y2="' + sy + '" stroke="#cfe0e8" stroke-width="2"/>';
       }
-      // jejak kaki di lantai (3 pasang -> 2)
+      // jejak kaki BESAR di lantai (3 pasang -> 2; yang hilang = pasangan ketiga)
       var pairs = B ? 2 : 3;
       for (var fi = 0; fi < pairs; fi++) {
-        var fx = 380 + fi * 42;
-        s += '<ellipse cx="' + fx + '" cy="436" rx="7" ry="11" fill="#c9b48a" opacity="0.8" transform="rotate(-12 ' + fx + ' 436)"/>' +
-          '<ellipse cx="' + (fx + 14) + '" cy="452" rx="7" ry="11" fill="#c9b48a" opacity="0.8" transform="rotate(12 ' + (fx + 14) + ' 452)"/>';
+        var fx = 380 + fi * 45;
+        s += '<ellipse cx="' + fx + '" cy="436" rx="9" ry="13" fill="#d8c9a3" opacity="0.85" transform="rotate(-12 ' + fx + ' 436)"/>' +
+          '<ellipse cx="' + (fx + 15) + '" cy="452" rx="9" ry="13" fill="#d8c9a3" opacity="0.85" transform="rotate(12 ' + (fx + 15) + ' 452)"/>';
       }
-      // tali pembatas
-      s += '<g><line x1="180" y1="368" x2="470" y2="368" stroke="#d9a441" stroke-width="3"/>' +
-        '<circle cx="180" cy="368" r="6" fill="#8a6d2f"/><circle cx="325" cy="368" r="6" fill="#8a6d2f"/><circle cx="470" cy="368" r="6" fill="#8a6d2f"/></g>';
+      // tali pembatas MERAH di depan T-rex (foreground, tiga tiang kuningan)
+      s += '<g>' +
+        '<path d="M300 385 Q365 402 430 385 Q495 402 560 385" stroke="#a83226" stroke-width="5" fill="none"/>' +
+        '<path d="M300 385 Q365 398 430 385 Q495 398 560 385" stroke="#c65a3a" stroke-width="2" fill="none"/>';
+      [300, 430, 560].forEach(function (px) {
+        s += '<rect x="' + (px - 3) + '" y="372" width="6" height="42" fill="#d9a441" stroke="#8a6d2f" stroke-width="1"/>' +
+          '<circle cx="' + px + '" cy="370" r="6" fill="#d9a441" stroke="#8a6d2f" stroke-width="1.5"/>';
+      });
+      s += '</g>'; // tutup tali pembatas
+      s += '</g>'; // tutup grup grading grade2
       return s;
     }
   };
@@ -336,114 +441,185 @@
     sub: 'Ruangan 3 dari 3',
     diffCount: 12,
     diffs: [
-      { id: 1, name: 'Saturnus — cincin 2 jadi 1', type: 'removed', x: 140, y: 140, r: 30 },
-      { id: 2, name: 'Rasi Biduk — satu bintang hilang', type: 'removed', x: 250, y: 60, r: 24 },
-      { id: 3, name: 'Teleskop — mengarah ke Mars', type: 'moved', x: 300, y: 300, r: 30 },
-      { id: 4, name: 'Label peta — ORION jadi ORIONN', type: 'word', x: 90, y: 200, r: 26, shape: 'rect', rx: 40, ry: 14 },
-      { id: 5, name: 'Mars — merah jadi oranye', type: 'recoloured', x: 300, y: 110, r: 26 },
-      { id: 6, name: 'Bulan sabit — menghadap kanan', type: 'flipped', x: 540, y: 130, r: 28 },
-      { id: 7, name: 'Meja kontrol — tombol 6 jadi 5', type: 'removed', x: 310, y: 400, r: 28 },
-      { id: 8, name: 'Astronot — visor turun', type: 'moved', x: 520, y: 290, r: 26 },
-      { id: 9, name: 'Bintang jatuh — muncul', type: 'added', x: 400, y: 70, r: 26 },
-      { id: 10, name: 'Jupiter — garis 3 jadi 2', type: 'removed', x: 460, y: 150, r: 28 },
-      { id: 11, name: 'Jam dinding — 21:00 jadi 22:00', type: 'moved', x: 560, y: 60, r: 24 },
-      { id: 12, name: 'Kucing Moci — tidur di peta bintang', type: 'added', x: 350, y: 445, r: 26 }
+      { id: 1, name: 'Saturnus — cincin 2 jadi 1', type: 'removed', x: 140, y: 140, r: 34 },
+      { id: 2, name: 'Rasi Biduk — satu bintang hilang', type: 'removed', x: 250, y: 60, r: 28 },
+      { id: 3, name: 'Teleskop — mengarah ke Mars', type: 'moved', x: 300, y: 300, r: 32 },
+      { id: 4, name: 'Label peta — ORION jadi ORIONN', type: 'word', x: 95, y: 215, r: 28, shape: 'rect', rx: 40, ry: 14 },
+      { id: 5, name: 'Mars — merah jadi oranye', type: 'recoloured', x: 305, y: 122, r: 30 },
+      { id: 6, name: 'Bulan sabit — menghadap kanan', type: 'flipped', x: 540, y: 130, r: 32 },
+      { id: 7, name: 'Meja kontrol — tombol 6 jadi 5', type: 'removed', x: 402, y: 407, r: 28 },
+      { id: 8, name: 'Astronot — visor turun', type: 'moved', x: 520, y: 272, r: 30 },
+      { id: 9, name: 'Bintang jatuh — muncul', type: 'added', x: 430, y: 85, r: 30 },
+      { id: 10, name: 'Jupiter — garis 3 jadi 2', type: 'removed', x: 460, y: 158, r: 32 },
+      { id: 11, name: 'Jam dinding — 21:00 jadi 22:00', type: 'moved', x: 560, y: 60, r: 28 },
+      { id: 12, name: 'Kucing Moci — tidur di peta bintang', type: 'added', x: 350, y: 451, r: 28 }
     ],
     draw: function (variant) {
       var B = variant === 'berubah';
       var s = '';
       s += '<defs>' +
         '<linearGradient id="wall3" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#27377a"/><stop offset="0.6" stop-color="#16224f"/><stop offset="1" stop-color="#0b1230"/></linearGradient>' +
+        '<stop offset="0" stop-color="#2c3a7d"/><stop offset="0.5" stop-color="#1a2450"/><stop offset="1" stop-color="#0b1230"/></linearGradient>' +
         '<linearGradient id="floor3" x1="0" y1="0" x2="0" y2="1">' +
         '<stop offset="0" stop-color="#2c3550"/><stop offset="1" stop-color="#141a2e"/></linearGradient>' +
         '<radialGradient id="spot3" cx="0.5" cy="0.5" r="0.5">' +
         '<stop offset="0" stop-color="#9fb4ff" stop-opacity="0.5"/><stop offset="1" stop-color="#9fb4ff" stop-opacity="0"/></radialGradient>' +
         '<radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5">' +
-        '<stop offset="0" stop-color="#cfe0ff" stop-opacity="0.35"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient>' +
+        '<stop offset="0" stop-color="#cfe0ff" stop-opacity="0.4"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient>' +
+        '<radialGradient id="nebA" cx="0.5" cy="0.5" r="0.5">' +
+        '<stop offset="0" stop-color="#7a4a9e" stop-opacity="0.55"/><stop offset="1" stop-color="#7a4a9e" stop-opacity="0"/></radialGradient>' +
+        '<radialGradient id="nebB" cx="0.5" cy="0.5" r="0.5">' +
+        '<stop offset="0" stop-color="#c96f8f" stop-opacity="0.5"/><stop offset="1" stop-color="#c96f8f" stop-opacity="0"/></radialGradient>' +
+        '<radialGradient id="nebC" cx="0.5" cy="0.5" r="0.5">' +
+        '<stop offset="0" stop-color="#4a6fd8" stop-opacity="0.5"/><stop offset="1" stop-color="#4a6fd8" stop-opacity="0"/></radialGradient>' +
+        '<radialGradient id="vig3" cx="0.5" cy="0.45" r="0.75">' +
+        '<stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.45"/></radialGradient>' +
+        '<filter id="grade3" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">' +
+        '<feColorMatrix type="matrix" values="1.12 0 0 0 -0.14 0 1.12 0 0 -0.14 0 0 1.12 0 0 -0.14 0 0 0 1 0"/>' +
+        '<feColorMatrix type="hueRotate" values="-18"/>' +
+        '<feColorMatrix type="saturate" values="1.3"/>' +
+        '</filter>' +
         '</defs>';
-      // ---- BACKGROUND: kubah + bintang berkelip + Biduk ----
+      // Grading resep "Planetarium" (skill color-grading-effects):
+      // brightnessContrast(-0.08, 0.12) + hueSaturation(-0.10, 0.30),
+      // diterapkan literal sebagai filter SVG (sRGB) pada seluruh scene.
+      s += '<g filter="url(#grade3)">';
+      // ---- BACKGROUND: kubah nebula + Bima Sakti + bintang warna-warni + rusuk kubah ----
       s += '<path d="M0 400 L0 150 A310 190 0 0 1 620 150 L620 400 Z" fill="url(#wall3)"/>';
-      s += '<rect x="0" y="400" width="620" height="70" fill="url(#floor3)"/>';
-      // bintang kecil berkelip (efek: class twinkle, delay berbeda)
-      var stars = [[40, 90], [90, 60], [150, 120], [210, 50], [260, 130], [330, 60], [380, 120], [430, 50], [480, 100], [540, 60], [580, 140], [60, 180], [200, 170], [330, 180], [500, 190], [580, 210], [120, 220], [260, 230], [420, 220]];
-      stars.forEach(function (p, i) {
-        s += '<circle class="twinkle" style="animation-delay:' + (i * 0.35) + 's" cx="' + p[0] + '" cy="' + p[1] + '" r="' + (2.5 + (i % 3) * 0.5) + '" fill="#fff"/>';
+      s += '<ellipse cx="120" cy="130" rx="130" ry="70" fill="url(#nebA)"/>' +
+        '<ellipse cx="490" cy="90" rx="140" ry="75" fill="url(#nebB)"/>' +
+        '<ellipse cx="320" cy="270" rx="170" ry="55" fill="url(#nebC)"/>';
+      // pita Bima Sakti: deret bintang kecil menyilang kubah
+      [[70, 310], [105, 292], [140, 272], [175, 255], [210, 236], [245, 218], [280, 200], [315, 182], [350, 164], [385, 146], [420, 128], [455, 110], [490, 92], [525, 74], [560, 56]].forEach(function (p, i) {
+        s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (1.5 + (i % 3)) + '" fill="#fff" opacity="' + (0.35 + (i % 3) * 0.15) + '"/>';
       });
-      // Rasi Biduk (satu bintang hilang di berubah)
+      // rusuk kubah (bayangan halus)
+      s += '<path d="M155 400 Q155 110 310 0" stroke="#fff" stroke-width="10" fill="none" opacity="0.05"/>' +
+        '<path d="M465 400 Q465 110 310 0" stroke="#fff" stroke-width="10" fill="none" opacity="0.05"/>';
+      s += '<rect x="0" y="400" width="620" height="70" fill="url(#floor3)"/>';
+      // vignette resep Planetarium (0.5/0.5) — hanya latar (dome/nebula/lantai),
+      // bintang + planet digambar sesudahnya jadi tetap terang.
+      s += '<rect x="0" y="0" width="620" height="470" fill="url(#vig3)"/>';
+      // bintang bervariasi ukuran + warna (efek: class twinkle, delay berbeda)
+      var stars = [[40, 90, 3, '#fff'], [90, 60, 4, '#ffd97a'], [150, 120, 2.5, '#fff'], [210, 50, 3.5, '#9fb4ff'], [260, 130, 2.5, '#fff'], [330, 60, 4, '#ffd97a'], [380, 120, 2.5, '#9fb4ff'], [430, 50, 3, '#fff'], [480, 100, 4, '#ffd97a'], [580, 140, 2.5, '#fff'], [60, 180, 3, '#9fb4ff'], [200, 170, 2.5, '#fff'], [330, 180, 3.5, '#ffd97a'], [500, 190, 2.5, '#fff'], [580, 210, 3, '#9fb4ff'], [120, 220, 2.5, '#ffd97a'], [260, 230, 3, '#fff'], [420, 220, 2.5, '#9fb4ff']];
+      stars.forEach(function (p, i) {
+        s += '<circle class="twinkle" style="animation-delay:' + (i * 0.35) + 's" cx="' + p[0] + '" cy="' + p[1] + '" r="' + p[2] + '" fill="' + p[3] + '"/>';
+      });
+      // bintang 4-sisi (sparkle besar, warna-warni)
+      [[170, 90], [360, 90], [520, 240], [80, 250]].forEach(function (p, i) {
+        var c = ['#ffd97a', '#9fb4ff', '#fff', '#ffd97a'][i];
+        s += '<path d="M' + p[0] + ' ' + (p[1] - 7) + ' L' + (p[0] + 2) + ' ' + (p[1] - 2) + ' L' + (p[0] + 7) + ' ' + p[1] +
+          ' L' + (p[0] + 2) + ' ' + (p[1] + 2) + ' L' + p[0] + ' ' + (p[1] + 7) + ' L' + (p[0] - 2) + ' ' + (p[1] + 2) +
+          ' L' + (p[0] - 7) + ' ' + p[1] + ' L' + (p[0] - 2) + ' ' + (p[1] - 2) + ' Z" fill="' + c + '"/>';
+      });
+      // Rasi Biduk BESAR (satu bintang hilang di berubah)
       var dipper = [[180, 60], [215, 48], [250, 60], [280, 82], [310, 78], [335, 55], [355, 88]];
       s += '<g stroke="#ffd97a" stroke-width="2.5" fill="none"><path d="M180 60 L215 48 L250 60 L280 82 L310 78 L335 55"/></g>';
       dipper.forEach(function (p, i) {
         if (B && i === 2) return; // bintang hilang
-        s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="5" fill="#ffd97a"/>';
+        s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="7" fill="#ffd97a" stroke="#b98a4a" stroke-width="1.5"/>';
       });
-      // bintang jatuh (hanya di berubah)
+      // bintang jatuh PANJANG + terang (hanya di berubah)
       if (B) {
-        s += '<g><line x1="400" y1="70" x2="440" y2="96" stroke="#fff" stroke-width="3" stroke-linecap="round"/>' +
-          '<circle cx="400" cy="70" r="4" fill="#fff"/></g>';
+        s += '<g><line x1="392" y1="60" x2="468" y2="110" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity="0.25"/>' +
+          '<line x1="392" y1="60" x2="468" y2="110" stroke="#fff" stroke-width="4" stroke-linecap="round"/>' +
+          '<circle cx="392" cy="60" r="5" fill="#fff"/>' +
+          '<circle cx="430" cy="85" r="2.5" fill="#fff"/></g>';
       }
-      // jendela bulan sabit — sabit TEBAL yang terbaca: cakram pucat + carving gelap
-      s += '<circle cx="540" cy="130" r="46" fill="url(#moonGlow)"/>' +
-        '<g><circle cx="540" cy="130" r="34" fill="#1b2a5e" stroke="#d9a441" stroke-width="3"/>' +
-        '<circle cx="540" cy="130" r="21" fill="#ffe9a8"/>' +
-        '<circle cx="' + (B ? 530 : 550) + '" cy="126" r="18" fill="#1b2a5e"/></g>';
-      // seberkas cahaya bulan dari jendela ke lantai (sumber cahaya kedua yang lembut)
-      s += '<path d="M522 162 L558 162 L606 400 L486 400 Z" fill="#cfe0ff" opacity="0.07"/>';
-      // jam dinding (21:00 -> 22:00)
-      s += '<g><circle cx="560" cy="60" r="20" fill="#f7ead2" stroke="#8a6d2f" stroke-width="3"/>' +
-        '<line x1="560" y1="60" x2="560" y2="46" stroke="#2b2118" stroke-width="3"/>' +
-        '<line x1="560" y1="60" x2="' + (B ? '572' : '548') + '" y2="60" stroke="#2b2118" stroke-width="3"/>' +
-        '<circle cx="560" cy="60" r="2.5" fill="#2b2118"/></g>';
-      // ---- MIDGROUND: planet + teleskop + astronot + peta bintang ----
-      // Saturnus (2 cincin -> 1)
-      s += '<g><circle cx="140" cy="140" r="34" fill="#eec27a" stroke="#b98a4a" stroke-width="1.5"/>' +
-        '<ellipse cx="140" cy="140" rx="56" ry="14" fill="none" stroke="#d9a441" stroke-width="5" transform="rotate(-18 140 140)"/>' +
-        (B ? '' : '<ellipse cx="140" cy="140" rx="66" ry="18" fill="none" stroke="#c9a24a" stroke-width="3" transform="rotate(-18 140 140)"/>') +
-        '<path d="M118 128 Q140 118 162 130" stroke="#c9a24a" stroke-width="3" fill="none"/></g>';
-      // Mars (merah -> oranye)
-      s += '<circle cx="300" cy="110" r="24" fill="' + (B ? '#e8912d' : '#c65a3a') + '" stroke="#8a3a20" stroke-width="1.5"/>' +
-        '<circle cx="292" cy="104" r="5" fill="#8a3a20" opacity="0.6"/><circle cx="308" cy="118" r="4" fill="#8a3a20" opacity="0.6"/>';
-      // Jupiter (3 garis -> 2)
-      s += '<circle cx="460" cy="150" r="30" fill="#d8b48a" stroke="#a8825a" stroke-width="1.5"/>' +
-        '<path d="M432 142 Q460 136 488 142" stroke="#a83226" stroke-width="5" fill="none"/>' +
-        '<path d="M432 156 Q460 150 488 156" stroke="#a83226" stroke-width="5" fill="none"/>' +
-        (B ? '' : '<path d="M436 168 Q460 163 484 168" stroke="#c96f3f" stroke-width="4" fill="none"/>');
-      // peta bintang di dinding kiri + label ORION(N)
-      s += '<g><rect x="40" y="180" width="110" height="70" rx="4" fill="#0d1a3a" stroke="#d9a441" stroke-width="2"/>' +
-        '<circle cx="70" cy="205" r="3" fill="#fff"/><circle cx="95" cy="195" r="3" fill="#fff"/><circle cx="120" cy="210" r="3" fill="#fff"/><circle cx="90" cy="228" r="3" fill="#fff"/>' +
-        '<path d="M70 205 L95 195 L120 210 L90 228" stroke="#ffd97a" stroke-width="1.5" fill="none"/>' +
-        '<text x="95" y="242" text-anchor="middle" fill="#ffd97a" font-size="13" font-weight="bold">' + (B ? 'ORIONN' : 'ORION') + '</text></g>';
-      // teleskop (mengarah bulan / Mars)
-      var ang = B ? -28 : -52;
-      s += '<g transform="translate(300,330) rotate(' + ang + ')">' +
-        '<rect x="-8" y="-70" width="16" height="70" rx="6" fill="#c9c9c9" stroke="#6b6b6b" stroke-width="2"/>' +
-        '<line x1="-4" y1="-66" x2="-4" y2="-6" stroke="#fff" stroke-width="2" opacity="0.35"/>' +
-        '<circle cx="0" cy="-72" r="10" fill="#9fb4ff"/></g>' +
-        '<path d="M288 330 L312 330 L318 380 L282 380 Z" fill="#5d6b74"/>';
-      // sorot teleskop
-      s += '<path d="M300 262 L' + (B ? '290' : '252') + ' 120 L' + (B ? '318' : '276') + ' 118 Z" fill="url(#spot3)"/>';
-      // manekin astronot (visor naik / turun)
-      s += '<g><rect x="500" y="300" width="40" height="70" rx="10" fill="#e8e8e8" stroke="#b9b9b9" stroke-width="1.5"/>' +
-        '<circle cx="520" cy="278" r="20" fill="#f4f4f4" stroke="#b9b9b9" stroke-width="2"/>' +
-        (B ? '<path d="M504 272 A16 16 0 0 1 536 272 L536 282 L504 282 Z" fill="#7fb069"/>' :
-          '<path d="M504 272 A16 16 0 0 1 536 272 L536 262 A16 16 0 0 0 504 262 Z" fill="#9fb4ff"/>') +
-        '<rect x="508" y="330" width="10" height="8" fill="#c65a3a"/><rect x="524" y="330" width="10" height="8" fill="#c65a3a"/></g>';
-      // ---- FOREGROUND: meja kontrol + peta lantai + Moci ----
-      s += '<g><rect x="180" y="384" width="260" height="46" rx="8" fill="#3a3f45" stroke="#d9a441" stroke-width="2"/>' +
-        '<rect x="180" y="384" width="260" height="4" rx="2" fill="#ffffff" opacity="0.08"/>' +
-        '<rect x="196" y="392" width="40" height="22" rx="3" fill="#1d2b1d"/>' +
-        '<circle cx="206" cy="403" r="3" fill="#7fd08a"/><circle cx="218" cy="403" r="3" fill="#ffd97a"/></g>';
+      // jendela bulan sabit BESAR — sabit tebal yang terbaca
+      s += '<circle cx="540" cy="130" r="52" fill="url(#moonGlow)"/>' +
+        '<g><circle cx="540" cy="130" r="36" fill="#1b2a5e" stroke="#d9a441" stroke-width="3"/>' +
+        '<circle cx="540" cy="130" r="24" fill="#ffe9a8"/>' +
+        '<circle cx="' + (B ? 528 : 552) + '" cy="126" r="21" fill="#1b2a5e"/></g>';
+      // seberkas cahaya bulan dari jendela ke lantai
+      s += '<path d="M522 162 L558 162 L606 400 L486 400 Z" fill="#cfe0ff" opacity="0.08"/>';
+      // jam dinding BESAR (21:00 -> 22:00 — jarum jam pindah jelas)
+      s += '<g><circle cx="560" cy="60" r="28" fill="#f7ead2" stroke="#8a6d2f" stroke-width="3.5"/>';
+      for (var ti2 = 0; ti2 < 12; ti2++) {
+        var a2 = ti2 * Math.PI / 6, tx1 = 560 + Math.sin(a2) * 22, ty1 = 60 - Math.cos(a2) * 22,
+          tx2 = 560 + Math.sin(a2) * 25, ty2 = 60 - Math.cos(a2) * 25;
+        s += '<line x1="' + tx1.toFixed(1) + '" y1="' + ty1.toFixed(1) + '" x2="' + tx2.toFixed(1) + '" y2="' + ty2.toFixed(1) + '" stroke="#2b2118" stroke-width="1.5"/>';
+      }
+      s += '<line x1="560" y1="60" x2="560" y2="38" stroke="#2b2118" stroke-width="3.5" stroke-linecap="round"/>' +
+        '<line x1="560" y1="60" x2="' + (B ? 542 : 538) + '" y2="' + (B ? 44 : 60) + '" stroke="#2b2118" stroke-width="3.5" stroke-linecap="round"/>' +
+        '<circle cx="560" cy="60" r="3" fill="#2b2118"/></g>';
+      // ---- MIDGROUND: planet BESAR + teleskop + astronot + peta bintang ----
+      // Saturnus BESAR (cincin luar TEBAL hilang di berubah — 2 jadi 1)
+      s += '<g><circle cx="140" cy="140" r="42" fill="#eec27a" stroke="#b98a4a" stroke-width="2"/>' +
+        '<path d="M108 122 Q140 108 172 124" stroke="#c9a24a" stroke-width="4" fill="none"/>' +
+        '<path d="M112 156 Q140 166 168 154" stroke="#c9a24a" stroke-width="3" fill="none" opacity="0.7"/>' +
+        '<ellipse cx="140" cy="140" rx="62" ry="16" fill="none" stroke="#d9a441" stroke-width="6" transform="rotate(-18 140 140)"/>' +
+        (B ? '' : '<ellipse cx="140" cy="140" rx="74" ry="21" fill="none" stroke="#c9a24a" stroke-width="4" transform="rotate(-18 140 140)"/>') +
+        '</g>';
+      // Mars BESAR dengan marka permukaan (merah KUAT -> oranye KUAT)
+      s += '<circle cx="305" cy="122" r="30" fill="' + (B ? '#f08c1e' : '#d4542e') + '" stroke="#8a3a20" stroke-width="2"/>' +
+        '<circle cx="296" cy="114" r="6" fill="#8a3a20" opacity="0.55"/><circle cx="314" cy="130" r="5" fill="#8a3a20" opacity="0.55"/>' +
+        '<circle cx="310" cy="108" r="3.5" fill="#8a3a20" opacity="0.5"/>' +
+        '<path d="M288 100 Q305 92 322 100" stroke="#fff" stroke-width="4" fill="none" opacity="0.6"/>';
+      // Jupiter BESAR (pita TEBAL 3 -> 2 + Bintik Merah Besar)
+      s += '<circle cx="460" cy="150" r="36" fill="#d8b48a" stroke="#a8825a" stroke-width="2"/>' +
+        '<path d="M426 138 Q460 131 494 138" stroke="#a83226" stroke-width="6" fill="none"/>' +
+        '<path d="M426 156 Q460 149 494 156" stroke="#a83226" stroke-width="6" fill="none"/>' +
+        (B ? '' : '<path d="M430 172 Q460 166 490 172" stroke="#c96f3f" stroke-width="5" fill="none"/>') +
+        '<ellipse cx="474" cy="164" rx="10" ry="6" fill="#b23a2e"/>';
+      // peta bintang di dinding kiri + label ORION(N) BESAR
+      s += '<g><rect x="35" y="175" width="120" height="80" rx="4" fill="#0d1a3a" stroke="#d9a441" stroke-width="2.5"/>' +
+        '<circle cx="65" cy="205" r="3.5" fill="#fff"/><circle cx="92" cy="194" r="3.5" fill="#fff"/><circle cx="120" cy="210" r="3.5" fill="#fff"/><circle cx="88" cy="228" r="3.5" fill="#fff"/>' +
+        '<path d="M65 205 L92 194 L120 210 L88 228" stroke="#ffd97a" stroke-width="1.5" fill="none"/>' +
+        '<text x="95" y="248" text-anchor="middle" fill="#ffd97a" font-size="15" font-weight="bold">' + (B ? 'ORIONN' : 'ORION') + '</text></g>';
+      // teleskop BESAR: asli mengarah ke BULAN (kanan-atas), berubah ke MARS (atas)
+      var tang = B ? -8 : 48;
+      var beam = B
+        ? '<path d="M285 221 L291 112 L319 112 Z" fill="url(#spot3)"/>'
+        : '<path d="M382 256 L526 118 L556 142 Z" fill="url(#spot3)"/>';
+      s += beam +
+        '<g transform="translate(300,330) rotate(' + tang + ')">' +
+        '<rect x="-11" y="-118" width="22" height="118" rx="9" fill="#c9c9c9" stroke="#6b6b6b" stroke-width="2"/>' +
+        '<line x1="-6" y1="-112" x2="-6" y2="-8" stroke="#fff" stroke-width="2.5" opacity="0.4"/>' +
+        '<circle cx="0" cy="-120" r="12" fill="#9fb4ff" stroke="#6b6b6b" stroke-width="2"/>' +
+        '<rect x="-14" y="-6" width="28" height="10" rx="3" fill="#8a8a8a"/></g>' +
+        '<circle cx="300" cy="330" r="11" fill="#d9a441" stroke="#8a6d2f" stroke-width="2"/>' +
+        '<path d="M284 336 L316 336 L322 382 L278 382 Z" fill="#5d6b74" stroke="#3a4046" stroke-width="1.5"/>' +
+        '<ellipse cx="300" cy="384" rx="34" ry="5" fill="#000" opacity="0.2"/>';
+      // manekin astronot BESAR dengan detail baju (visor: wajah terlihat / visor hijau menutup)
+      s += '<g>' +
+        '<rect x="548" y="300" width="14" height="44" rx="6" fill="#d8d8d8" stroke="#b9b9b9" stroke-width="1.5"/>' +
+        '<rect x="486" y="302" width="12" height="38" rx="6" fill="#e8e8e8" stroke="#b9b9b9" stroke-width="1.5"/>' +
+        '<rect x="498" y="292" width="44" height="78" rx="12" fill="#e8e8e8" stroke="#b9b9b9" stroke-width="2"/>' +
+        '<rect x="508" y="312" width="24" height="18" rx="3" fill="#3a3f45"/>' +
+        '<rect x="511" y="317" width="7" height="7" fill="#c65a3a"/><rect x="522" y="317" width="7" height="7" fill="#c65a3a"/>' +
+        '<rect x="498" y="348" width="44" height="8" fill="#c65a3a" opacity="0.85"/>' +
+        '<rect x="504" y="370" width="14" height="26" fill="#e8e8e8" stroke="#b9b9b9" stroke-width="1.5"/>' +
+        '<rect x="522" y="370" width="14" height="26" fill="#e8e8e8" stroke="#b9b9b9" stroke-width="1.5"/>' +
+        '<rect x="502" y="394" width="18" height="10" rx="3" fill="#c65a3a"/><rect x="520" y="394" width="18" height="10" rx="3" fill="#c65a3a"/>' +
+        '<circle cx="520" cy="268" r="26" fill="#f4f4f4" stroke="#b9b9b9" stroke-width="2"/>' +
+        (B
+          ? '<ellipse cx="520" cy="268" rx="18" ry="17" fill="#7fb069" stroke="#4a7a3a" stroke-width="1.5"/>' +
+            '<path d="M508 258 L530 276" stroke="#fff" stroke-width="3" opacity="0.55"/>'
+          : '<circle cx="520" cy="268" r="17" fill="#f2c89b"/>' +
+            '<circle cx="514" cy="265" r="2" fill="#2b2118"/><circle cx="526" cy="265" r="2" fill="#2b2118"/>' +
+            '<path d="M514 274 Q520 278 526 274" stroke="#2b2118" stroke-width="1.5" fill="none"/>' +
+            '<path d="M503 258 A17 17 0 0 1 537 258 L537 249 A17 17 0 0 0 503 249 Z" fill="#9fb4ff" stroke="#6b8fc6" stroke-width="1.5"/>') +
+        '</g>';
+      // ---- FOREGROUND: meja kontrol BESAR + peta lantai + Moci ----
+      s += '<g><rect x="170" y="380" width="280" height="54" rx="8" fill="#3a3f45" stroke="#d9a441" stroke-width="2"/>' +
+        '<rect x="170" y="380" width="280" height="4" rx="2" fill="#ffffff" opacity="0.08"/>' +
+        '<rect x="182" y="390" width="52" height="28" rx="3" fill="#1d2b1d" stroke="#2f5c28" stroke-width="1.5"/>' +
+        '<circle cx="192" cy="404" r="3" fill="#7fd08a"/><circle cx="206" cy="404" r="3" fill="#ffd97a"/>' +
+        '<path d="M216 404 l5 -5 5 5 5 -5" stroke="#7fd08a" stroke-width="1.5" fill="none"/></g>';
       var btns = B ? 5 : 6;
       for (var bi = 0; bi < btns; bi++) {
-        var bx = 260 + bi * 28;
-        s += '<circle cx="' + bx + '" cy="403" r="9" fill="' + ['#c65a3a', '#d9a441', '#3f7d5a', '#7fb069', '#9fb4ff', '#c96f3f'][bi] + '" stroke="#2b2118" stroke-width="2"/>';
+        var bx = 252 + bi * 30;
+        s += '<circle cx="' + bx + '" cy="407" r="12" fill="' + ['#c65a3a', '#d9a441', '#3f7d5a', '#7fb069', '#9fb4ff', '#c96f3f'][bi] + '" stroke="#2b2118" stroke-width="2"/>' +
+          '<circle cx="' + (bx - 3) + '" cy="403" r="3" fill="#fff" opacity="0.4"/>';
       }
-      // peta bintang di lantai (border lebih terang supaya terbaca di lantai gelap)
-      s += '<g><rect x="60" y="428" width="500" height="34" rx="4" fill="#182642" stroke="#8a9cc6" stroke-width="2.5"/>' +
-        '<circle cx="110" cy="445" r="3" fill="#fff"/><circle cx="180" cy="440" r="3" fill="#fff"/><circle cx="250" cy="448" r="3" fill="#fff"/><circle cx="430" cy="442" r="3" fill="#fff"/><circle cx="500" cy="448" r="3" fill="#fff"/>' +
-        '<path d="M110 445 L180 440 L250 448" stroke="#ffd97a" stroke-width="1.5" fill="none"/></g>';
-      // Moci tidur di peta bintang (hanya di berubah)
-      if (B) s += cat(350, 440, 0.9);
+      // peta bintang di lantai (border terang supaya terbaca di lantai gelap)
+      s += '<g><rect x="60" y="436" width="500" height="30" rx="4" fill="#182642" stroke="#8a9cc6" stroke-width="2.5"/>' +
+        '<circle cx="110" cy="451" r="3" fill="#fff"/><circle cx="180" cy="446" r="3" fill="#fff"/><circle cx="250" cy="454" r="3" fill="#fff"/><circle cx="430" cy="448" r="3" fill="#fff"/><circle cx="500" cy="454" r="3" fill="#fff"/>' +
+        '<path d="M110 451 L180 446 L250 454" stroke="#ffd97a" stroke-width="1.5" fill="none"/></g>';
+      // Moci tidur di peta bintang (hanya di berubah) — oranye besar dan jelas
+      if (B) s += cat(350, 448, 1.05);
+      s += '</g>'; // tutup grup grading grade3
       return s;
     }
   };
